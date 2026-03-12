@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Image Upload Test</title>
+</head>
+<body>
+
+<h2>Upload Image Test</h2>
+
+<input type="file" id="image" name="image">
+<button onclick="uploadImage()">Upload</button>
+
+<script>
+async function uploadImage(){
+  const formData = new FormData();
+  const file = document.getElementById("image").files[0];
+  if(!file) return alert("Please select an image");
+
+  formData.append("image", file);
+
+  try {
+    const res = await fetch("http://localhost:5001/upload", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+    alert(JSON.stringify(data));
+  } catch (err) {
+    console.error(err);
+    alert("Error uploading image");
+  }
+}
+</script>
+
+</body>
+</html>

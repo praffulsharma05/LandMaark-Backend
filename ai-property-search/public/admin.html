@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Panel</title>
+<style>
+body{font-family:Arial;background:linear-gradient(135deg,#00f2fe,#4facfe);display:flex;justify-content:center;align-items:center;height:100vh;margin:0;}
+.container{background:white;padding:15px;border-radius:12px;width:320px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 20px rgba(0,0,0,0.2);}
+h2{text-align:center;margin-bottom:10px;color:#333;font-size:18px;}
+input,textarea,select{width:100%;padding:6px;margin-top:4px;margin-bottom:8px;border-radius:6px;border:1px solid #ccc;font-size:12px;}
+textarea{height:45px;}
+button{width:100%;padding:8px;background:#4facfe;color:white;border:none;border-radius:6px;font-size:13px;cursor:pointer;}
+button:hover{background:#007bff;}
+.latlong{display:flex;gap:8px;}
+#preview{width:100%;margin-top:5px;border-radius:6px;display:none;}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Add Property</h2>
+<form id="propertyForm">
+<input id="title" placeholder="Title">
+<textarea id="description" placeholder="Description"></textarea>
+<input id="location" placeholder="Location">
+<div class="latlong">
+<input id="latitude" placeholder="Latitude">
+<input id="longitude" placeholder="Longitude">
+</div>
+<select id="bhk"><option value="">Select BHK</option></select>
+<select id="property_type"><option value="">Select Property Type</option></select>
+<select id="construction_type"><option value="">Select Construction Type</option></select>
+<select id="construction_status"><option value="">Select Construction Status</option></select>
+<input id="price" placeholder="Price">
+<input id="area_sqft" placeholder="Area Sqft">
+<select id="verified"><option value="1">Verified</option><option value="0">Not Verified</option></select>
+<label>Upload Property Image</label>
+<input type="file" id="image" accept="image/*" onchange="previewImage(event)">
+<img id="preview">
+<button type="button" onclick="addProperty()">Submit</button>
+</form>
+</div>
+
+<script>
+async function loadOptions(){
+  try {
+    const res = await fetch("/api/options");
+    if(!res.ok) throw new Error("API Status: " + res.status);
+    
+    const data = await res.json();
+    console.log("Options loaded:", data);
+    
+    if(data.bhk && data.bhk.length > 0) {
+      data.bhk.forEach(item=>{
+          const opt=document.createElement("option");
+          opt.value=item.bhk;
+          opt.text=item.bhk+" BHK";
+          document.getElementById("bhk").appendChild(opt);
+      });
+    }
+    if(data.property_type && data.property_type.length > 0) {
+      data.property_type.forEach(item=>{
+          const opt=document.createElement("option");
+          opt.value=item.property_type;
+          opt.text=item.property_type;
+          document.getElementById("property_type").appendChild(opt);
+      });
+    }
+    if(data.construction_type && data.construction_type.length > 0) {
+      data.construction_type.forEach(item=>{
+          const opt=document.createElement("option");
+          opt.value=item.construction_type;
+          opt.text=item.construction_type;
+          document.getElementById("construction_type").appendChild(opt);
+      });
+    }
+    if(data.construction_status && data.construction_status.length > 0) {
+      data.construction_status.forEach(item=>{
+          const opt=document.createElement("option");
+          opt.value=item.construction_status;
+          opt.text=item.construction_status;
+          document.getElementById("construction_status").appendChild(opt);
+      });
+    }
+  } catch(err) {
+    console.error("Options load error:", err);
+    alert("Warning: Could not load dropdown options. DB might be empty.\nBut you can still submit!");
+  }
+}
+loadOptions();
+
+function previewImage(event){
+    const reader=new FileReader();
+    reader.onload=function(){
+        const img=document.getElementById("preview");
+        img.src=reader.result;
+        img.style.display="block";
+    }
+    reader.readAsDataURL(event.target.files[0]);
+}
+
+async function addProperty(){
+    try {
+      // Validation
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const location = document.getElementById("location").value.trim();
+      
+      if(!title || !description || !location) {
+          alert("Please fill Title, Description, and Location!");
+          return;
+      }
+      
+      const formData=new FormData();
+      ["title","description","location","latitude","longitude","bhk","property_type","construction_type","construction_status","price","area_sqft","verified"].forEach(id=>{
+          formData.append(id, document.getElementById(id).value);
+      });
+      const imageFile=document.getElementById("image").files[0];
+      if(imageFile) formData.append("image", imageFile);
+
+      console.log("Submitting form...");
+      const res=await fetch("/api/admin/property",{ method:"POST", body:formData });
+      const data=await res.json();
+      
+      console.log("Response:", data);
+      console.log("Status:", res.status);
+
+      if(res.ok){
+          alert("✓ Property Added Successfully");
+          document.getElementById("propertyForm").reset();
+          document.getElementById("preview").style.display="none";
+      } else {
+          alert("Error: "+(data.error || "Unknown error"));
+      }
+    } catch(err) {
+      console.error("Submit error:", err);
+      alert("Error: " + err.message);
+    }
+}
+</script>
+</body>
+</html>

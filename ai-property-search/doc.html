@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Property API Documentation</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;background:#f5f5f5;margin:0;padding:0;color:#333}
+header{background:#222;color:#fff;padding:20px;text-align:center}
+.container{max-width:1000px;margin:auto;padding:20px}
+.card{background:#fff;padding:20px;border-radius:8px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+h2{margin-top:0}
+code,pre{background:#eee;padding:10px;border-radius:6px;display:block;overflow:auto}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border:1px solid #ddd;padding:8px;text-align:left}
+th{background:#f0f0f0}
+.endpoint{font-weight:bold;color:#0a58ca}
+.method{background:#0a58ca;color:#fff;padding:4px 8px;border-radius:4px;margin-right:8px}
+</style>
+</head>
+<body>
+<header>
+<h1>Property Management API Documentation</h1>
+<p>Backend API for managing property listings</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>Base URL</h2>
+<pre>http://localhost:5000</pre>
+<p>If using ngrok, replace with your public URL.</p>
+</div>
+
+<div class="card">
+<h2>Add Property (Admin)</h2>
+<p><span class="method">POST</span> <span class="endpoint">/api/admin/property</span></p>
+
+<h3>Request Body</h3>
+<table>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+<tr><td>title</td><td>string</td><td>Property title</td></tr>
+<tr><td>description</td><td>string</td><td>Detailed description of property</td></tr>
+<tr><td>location</td><td>string</td><td>City or area name</td></tr>
+<tr><td>latitude</td><td>number</td><td>Latitude coordinate</td></tr>
+<tr><td>longitude</td><td>number</td><td>Longitude coordinate</td></tr>
+<tr><td>bhk</td><td>number</td><td>BHK configuration</td></tr>
+<tr><td>property_type</td><td>string</td><td>Apartment, Villa, Plot etc.</td></tr>
+<tr><td>construction_type</td><td>string</td><td>New or Resale</td></tr>
+<tr><td>construction_status</td><td>string</td><td>Ready to Move / Under Construction</td></tr>
+<tr><td>price</td><td>number</td><td>Property price</td></tr>
+<tr><td>area_sqft</td><td>number</td><td>Total area in square feet</td></tr>
+<tr><td>verified</td><td>boolean</td><td>Whether property is verified</td></tr>
+</table>
+
+<h3>Example Request</h3>
+<pre>{
+"title":"Luxury 3BHK Apartment",
+"description":"Beautiful apartment with city view",
+"location":"Jaipur",
+"latitude":26.9124,
+"longitude":75.7873,
+"bhk":3,
+"property_type":"Apartment",
+"construction_type":"New",
+"construction_status":"Ready to Move",
+"price":7500000,
+"area_sqft":1450,
+"verified":true
+}</pre>
+
+<h3>Example Response</h3>
+<pre>{
+"message": "Property added"
+}</pre>
+</div>
+
+<div class="card">
+<h2>Get Dropdown Options</h2>
+<p><span class="method">GET</span> <span class="endpoint">/api/options</span></p>
+
+<h3>Description</h3>
+<p>Returns unique values for dropdown filters like BHK, property type and construction status.</p>
+
+<h3>Example Response</h3>
+<pre>{
+"bhk":[{"bhk":1},{"bhk":2},{"bhk":3}],
+"property_type":[{"property_type":"Apartment"},{"property_type":"Villa"}],
+"construction_type":[{"construction_type":"New"},{"construction_type":"Resale"}],
+"construction_status":[{"construction_status":"Ready to Move"},{"construction_status":"Under Construction"}]
+}</pre>
+</div>
+
+<div class="card">
+<h2>Filter Properties</h2>
+<p><span class="method">GET</span> <span class="endpoint">/api/properties</span></p>
+
+<h3>Query Parameters</h3>
+<table>
+<tr><th>Parameter</th><th>Description</th></tr>
+<tr><td>city</td><td>Filter by city/location</td></tr>
+<tr><td>bhk</td><td>Filter by BHK</td></tr>
+<tr><td>minPrice</td><td>Minimum price</td></tr>
+<tr><td>maxPrice</td><td>Maximum price</td></tr>
+<tr><td>type</td><td>Property type</td></tr>
+</table>
+
+<h3>Example Request</h3>
+<pre>/api/properties?city=Jaipur&bhk=3&minPrice=5000000&maxPrice=10000000&type=Apartment</pre>
+
+<h3>Example Response</h3>
+<pre>{
+"data":[
+{
+"property_id":1,
+"title":"Luxury 3BHK Apartment",
+"description":"Beautiful apartment with city view",
+"location":"Jaipur",
+"latitude":26.9124,
+"longitude":75.7873,
+"bhk":3,
+"property_type":"Apartment",
+"construction_type":"New",
+"construction_status":"Ready to Move",
+"price":7500000,
+"area_sqft":1450,
+"verified":1
+}
+]
+}</pre>
+</div>
+
+<div class="card">
+<h2>Server Info</h2>
+<pre>Port: 5000
+Framework: Express
+Database: MySQL
+</pre>
+</div>
+
+</div>
+</body>
+</html>

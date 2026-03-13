@@ -56,9 +56,11 @@ try {
 // ------------------- Add Property -------------------
 app.post("/api/admin/property", upload.single("image"), async (req, res) => {
   try {
-    console.log("01. POST /api/admin/property called");
-    console.log("02. req.body:", req.body);
-    console.log("03. req.file:", req.file);
+    console.log("🔍 POST /api/admin/property called");
+    console.log("📋 req.query:", JSON.stringify(req.query, null, 2));
+    console.log("📋 req.params:", JSON.stringify(req.params, null, 2));
+    console.log("📋 req.body:", JSON.stringify(req.body, null, 2));
+    console.log("📋 req.file:", req.file);
 
     const {
       title, description, location, latitude, longitude, bhk,
@@ -125,12 +127,14 @@ app.post("/api/admin/property", upload.single("image"), async (req, res) => {
     console.log("19. SQL execution result:", result);
 
     console.log("20. Property added successfully");
+    console.log("📤 Sending success response");
     res.json({ message: "Property added successfully!" });
 
   } catch (error) {
-    console.error("ERROR caught:", error.message);
-    console.error("Error code:", error.code);
-    console.error("Full error:", error);
+    console.error("❌ ERROR caught:", error.message);
+    console.error("❌ Error code:", error.code);
+    console.error("❌ Full error:", error);
+    console.log("📤 Sending error response");
     res.status(500).json({ error: error.message || "Server error" });
   }
 });
@@ -138,17 +142,35 @@ app.post("/api/admin/property", upload.single("image"), async (req, res) => {
 // ------------------- Dropdown Options -------------------
 app.get("/api/options", async (req, res) => {
   try {
-    console.log("GET /api/options called");
-    const [bhk] = await db.execute(`SELECT DISTINCT bhk FROM bhk_options ORDER BY bhk ASC`);
-    const [ptype] = await db.execute(`SELECT DISTINCT name FROM property_types ORDER BY name ASC`);
-    const [ctype] = await db.execute(`SELECT DISTINCT name FROM construction_types ORDER BY name ASC`);
-    const [status] = await db.execute(`SELECT DISTINCT name FROM construction_statuses ORDER BY name ASC`);
+    console.log("🔍 GET /api/options called");
+    console.log("📋 req.query:", JSON.stringify(req.query, null, 2));
+    console.log("📋 req.params:", JSON.stringify(req.params, null, 2));
+    console.log("📋 req.body:", JSON.stringify(req.body, null, 2));
 
-    console.log("Options fetched:", { bhk: bhk.length, ptype: ptype.length, ctype: ctype.length, status: status.length }, ptype);
-    res.json({ bhk, property_type: ptype, construction_type: ctype, construction_status: status });
+    console.log("🚀 Fetching bhk options...");
+    const [bhk] = await db.execute(`SELECT DISTINCT bhk FROM bhk_options ORDER BY bhk ASC`);
+    console.log("   - BHK options:", bhk);
+
+    console.log("🚀 Fetching property_type options...");
+    const [ptype] = await db.execute(`SELECT DISTINCT name FROM property_types ORDER BY name ASC`);
+    console.log("   - Property type options:", ptype);
+
+    console.log("🚀 Fetching construction_type options...");
+    const [ctype] = await db.execute(`SELECT DISTINCT name FROM construction_types ORDER BY name ASC`);
+    console.log("   - Construction type options:", ctype);
+
+    console.log("🚀 Fetching construction_status options...");
+    const [status] = await db.execute(`SELECT DISTINCT name FROM construction_statuses ORDER BY name ASC`);
+    console.log("   - Construction status options:", status);
+
+    const response = { bhk, property_type: ptype, construction_type: ctype, construction_status: status };
+    console.log("📤 Sending options response:", { counts: { bhk: bhk.length, ptype: ptype.length, ctype: ctype.length, status: status.length } });
+    res.json(response);
 
   } catch (error) {
-    console.error("Error in GET /api/options:", error.message);
+    console.error("❌ Error in GET /api/options:", error.message);
+    console.error("❌ Error code:", error.code);
+    console.error("❌ Full error:", error);
     res.status(500).json({ error: error.message || "Options error" });
   }
 });

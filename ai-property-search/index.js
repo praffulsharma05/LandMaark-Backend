@@ -4,12 +4,19 @@ import mysql from "mysql2/promise";
 import multer from "multer";
 import path from "path";
 import cors from "cors";
+import fs from "fs";
 import { setupPropertiesAPI } from "./properties.js";
 
 dotenv.config();
 const app = express();
 app.use(cors()); // optional
 app.use(express.json());
+
+// Create uploads folder if it doesn't exist
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+  console.log("✓ Created uploads folder");
+}
 
 // Serve static files & uploads
 app.use(express.static("public"));
@@ -132,12 +139,12 @@ app.post("/api/admin/property", upload.single("image"), async (req, res) => {
 app.get("/api/options", async (req, res) => {
   try {
     console.log("GET /api/options called");
-    const [bhk] = await db.execute(`SELECT DISTINCT bhk FROM properties ORDER BY bhk ASC`);
-    const [ptype] = await db.execute(`SELECT DISTINCT property_type FROM properties`);
-    const [ctype] = await db.execute(`SELECT DISTINCT construction_type FROM properties`);
-    const [status] = await db.execute(`SELECT DISTINCT construction_status FROM properties`);
+    const [bhk] = await db.execute(`SELECT DISTINCT bhk FROM bhk_options ORDER BY bhk ASC`);
+    const [ptype] = await db.execute(`SELECT DISTINCT name FROM property_types ORDER BY name ASC`);
+    const [ctype] = await db.execute(`SELECT DISTINCT name FROM construction_types ORDER BY name ASC`);
+    const [status] = await db.execute(`SELECT DISTINCT name FROM construction_statuses ORDER BY name ASC`);
 
-    console.log("Options fetched:", { bhk: bhk.length, ptype: ptype.length, ctype: ctype.length, status: status.length });
+    console.log("Options fetched:", { bhk: bhk.length, ptype: ptype.length, ctype: ctype.length, status: status.length }, ptype);
     res.json({ bhk, property_type: ptype, construction_type: ctype, construction_status: status });
 
   } catch (error) {

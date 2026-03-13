@@ -56,27 +56,28 @@ async function loadOptions(){
           document.getElementById("bhk").appendChild(opt);
       });
     }
+    console.log('data.property_type:', data.property_type);
     if(data.property_type && data.property_type.length > 0) {
       data.property_type.forEach(item=>{
           const opt=document.createElement("option");
-          opt.value=item.property_type;
-          opt.text=item.property_type;
+          opt.value=item.name;
+          opt.text=item.name;
           document.getElementById("property_type").appendChild(opt);
       });
     }
     if(data.construction_type && data.construction_type.length > 0) {
       data.construction_type.forEach(item=>{
           const opt=document.createElement("option");
-          opt.value=item.construction_type;
-          opt.text=item.construction_type;
+          opt.value=item.name;
+          opt.text=item.name;
           document.getElementById("construction_type").appendChild(opt);
       });
     }
     if(data.construction_status && data.construction_status.length > 0) {
       data.construction_status.forEach(item=>{
           const opt=document.createElement("option");
-          opt.value=item.construction_status;
-          opt.text=item.construction_status;
+          opt.value=item.name;
+          opt.text=item.name;
           document.getElementById("construction_status").appendChild(opt);
       });
     }
@@ -118,6 +119,7 @@ async function addProperty(){
 
       console.log("Submitting form...");
       const res=await fetch("/api/admin/property",{ method:"POST", body:formData });
+      console.log("Raw response:", res);
       const data=await res.json();
       
       console.log("Response:", data);

@@ -8,7 +8,7 @@ export function setupPropertiesAPI(app, db) {
       console.log("GET /api/properties called");
       console.log("Query params:", req.query);
 
-      const { city, bhk, minPrice, maxPrice, type, construction_type } = req.query;
+      const { city, bhk, minPrice, maxPrice, property_type, construction_type } = req.query;
       
       let sql = `SELECT * FROM properties WHERE 1=1`;
       const params = [];
@@ -38,10 +38,10 @@ export function setupPropertiesAPI(app, db) {
         console.log("✓ Filter: maxPrice <=", maxPrice);
       }
 
-      if (type) {
+      if (property_type) {
         sql += ` AND property_type = ?`;
-        params.push(type);
-        console.log("✓ Filter: type =", type);
+        params.push(property_type);
+        console.log("✓ Filter: property_type =", property_type);
       }
 
       if (construction_type) {

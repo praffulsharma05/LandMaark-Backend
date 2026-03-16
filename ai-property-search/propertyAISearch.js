@@ -1,6 +1,6 @@
 import { setupExampleWithPropertySchema } from "./exampleWithPropertySchema.js";
 
-export function setupPropertiesAISearchAPIs(app, db) {
+export async function setupPropertiesAISearchAPIs(app, db) {
   app.get("/api/propSearch/ai", async (req, res) => {
     try {
       console.log("🔍 GET /api/propSearch/ai called");
@@ -12,18 +12,20 @@ export function setupPropertiesAISearchAPIs(app, db) {
       }
 
       // Pass string to AI function
-      const sqlQuery = await setupExampleWithPropertySchema("need 3 bhk");
+      const sqlQuery = await setupExampleWithPropertySchema(userQuery);
 
       console.log("Generated SQL Query:\n", sqlQuery);
+      const [properties] = await db.execute(sqlQuery);
+      
+      console.log("📊 Query result:");
+      console.log("   - Rows returned:", properties.length);
+      console.log("   - Sample data:", properties.slice(0, 2)); // First 2 rows
+      console.log("📤 Sending response with", properties.length, "properties");
 
-      // Optional: execute safely on DB
-      // const [rows] = await db.query(sqlQuery);
-
-      res.json({
+      res.json({ 
         success: true,
-        userQuery,
-        generatedSQL: sqlQuery,
-        // data: rows
+        count: properties.length,
+        data: properties 
       });
 
     } catch (error) {
@@ -32,3 +34,4 @@ export function setupPropertiesAISearchAPIs(app, db) {
     }
   });
 }
+ 

@@ -6,6 +6,7 @@ import path from "path";
 import cors from "cors";
 import fs from "fs";
 import { setupPropertiesAPI } from "./properties.js";
+import { setupAmenityApis } from "./amenities.js";
 import { setupPropertiesAISearchAPIs } from "./propertyAISearch.js";
 import { setupExampleWithPropertySchema } from "./exampleWithPropertySchema.js";
 import { setupExampleDB } from "./exampleDB.js";
@@ -179,6 +180,7 @@ app.get("/api/options", async (req, res) => {
 
 // ------------------- Setup Properties API -------------------
 setupPropertiesAPI(app, db);
+setupAmenityApis(app, db);
 
 setupPropertiesAISearchAPIs(app, db);
 

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Amenity</title>
+</head>
+<body>
+<h2>Add New Amenity</h2>
+<form id="amenityForm">
+    <label>Name:</label><br>
+    <input type="text" id="name" required><br><br>
+    <label>Description:</label><br>
+    <textarea id="description"></textarea><br><br>
+    <button type="submit">Add Amenity</button>
+</form>
+
+<p id="response"></p>
+
+<script>
+document.getElementById('amenityForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const description = document.getElementById('description').value;
+
+    const res = await fetch('http://localhost:5000/api/admin/amenity', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name, description})
+    });
+    const data = await res.json();
+    document.getElementById('response').innerText = JSON.stringify(data);
+});
+</script>
+</body>
+</html>

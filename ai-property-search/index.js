@@ -7,7 +7,7 @@ import cors from "cors";
 import fs from "fs";
 import { setupPropertiesAPI } from "./properties.js";
 import { setupPropertiesAISearchAPIs } from "./propertyAISearch.js";
-import { setupExample } from "./example.js";
+import { setupExampleWithPropertySchema } from "./exampleWithPropertySchema.js";
 dotenv.config();
 const app = express();
 app.use(cors()); // optional
@@ -181,7 +181,14 @@ setupPropertiesAPI(app, db);
 
 setupPropertiesAISearchAPIs(app, db);
 
-setupExample(app, db);
+//setupExample(app, db);
+setupExampleWithPropertySchema(app, db);
+
+  //const query = "need a house in 2 crore in jaipur";
+
+  //const sqlQuery = await setupExampleWithPropertySchema(query);
+
+  //console.log("Generated SQL Query:\n", sqlQuery);
 // ------------------- Start Server -------------------
 app.listen(5000, "0.0.0.0", () => {
   console.log("\n✓✓✓ Server running on port 5000 ✓✓✓");

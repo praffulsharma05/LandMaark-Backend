@@ -23,12 +23,12 @@ document.getElementById('amenityForm').addEventListener('submit', async function
     const name = document.getElementById('name').value;
     const description = document.getElementById('description').value;
 
-    const res = await fetch('http://localhost:5000/api/admin/amenity', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({name, description})
+    const res = await fetch(`http://localhost:5000/api/add/amenity?name=${encodeURIComponent(name)}&description=${encodeURIComponent(description)}`, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'}
     });
     const data = await res.json();
+    
     document.getElementById('response').innerText = JSON.stringify(data);
 });
 </script>

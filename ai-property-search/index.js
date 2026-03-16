@@ -6,7 +6,8 @@ import path from "path";
 import cors from "cors";
 import fs from "fs";
 import { setupPropertiesAPI } from "./properties.js";
-
+import { setupPropertiesAISearchAPIs } from "./propertyAISearch.js";
+import { setupExample } from "./example.js";
 dotenv.config();
 const app = express();
 app.use(cors()); // optional
@@ -178,6 +179,9 @@ app.get("/api/options", async (req, res) => {
 // ------------------- Setup Properties API -------------------
 setupPropertiesAPI(app, db);
 
+setupPropertiesAISearchAPIs(app, db);
+
+setupExample(app, db);
 // ------------------- Start Server -------------------
 app.listen(5000, "0.0.0.0", () => {
   console.log("\n✓✓✓ Server running on port 5000 ✓✓✓");

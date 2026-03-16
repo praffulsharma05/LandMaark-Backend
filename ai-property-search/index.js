@@ -8,6 +8,7 @@ import fs from "fs";
 import { setupPropertiesAPI } from "./properties.js";
 import { setupPropertiesAISearchAPIs } from "./propertyAISearch.js";
 import { setupExampleWithPropertySchema } from "./exampleWithPropertySchema.js";
+import { setupExampleDB } from "./exampleDB.js";
 dotenv.config();
 const app = express();
 app.use(cors()); // optional
@@ -183,7 +184,7 @@ setupPropertiesAISearchAPIs(app, db);
 
 //setupExample(app, db);
 setupExampleWithPropertySchema(app, db);
-
+setupExampleDB(app,db);
   //const query = "need a house in 2 crore in jaipur";
 
   //const sqlQuery = await setupExampleWithPropertySchema(query);

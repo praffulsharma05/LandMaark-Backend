@@ -1,0 +1,42 @@
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add Property Type</title>
+</head>
+
+<body>
+
+<h2>Add Property Type</h2>
+
+<form id="propertyForm">
+
+<input type="text" id="properties" placeholder="Enter property type" required>
+
+<button type="submit">Add</button>
+
+</form>
+
+<p id="response"></p>
+
+<script>
+
+document.getElementById("propertyForm").addEventListener("submit", async function(e){
+
+e.preventDefault();
+
+const property = document.getElementById("properties").value;
+
+const res = await fetch(`http://localhost:5000/api/property_types?name=${encodeURIComponent(property)}`);
+
+const data = await res.json();
+
+document.getElementById("response").innerText = JSON.stringify(data);
+
+});
+
+</script>
+
+</body>
+</html>

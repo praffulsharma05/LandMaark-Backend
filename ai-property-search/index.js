@@ -10,6 +10,10 @@ import { setupAmenityApis } from "./amenities.js";
 import { setupPropertiesAISearchAPIs } from "./propertyAISearch.js";
 import { setupExampleWithPropertySchema } from "./exampleWithPropertySchema.js";
 import { setupExampleDB } from "./exampleDB.js";
+import {setupPractice} from './Practice.js'
+import {setupConstructiontype} from './setupConstructiontype.js'
+import {setupConstructionStatus} from './construction_status.js'
+import {property_typeSetup} from './Propertytype.js'
 dotenv.config();
 const app = express();
 app.use(cors()); // optional
@@ -187,6 +191,10 @@ setupPropertiesAISearchAPIs(app, db);
 //setupExample(app, db);
 setupExampleWithPropertySchema(app, db);
 setupExampleDB(app,db);
+setupPractice(app,db)
+setupConstructiontype(app,db)
+setupConstructionStatus(app,db)
+property_typeSetup(app,db)
   //const query = "need a house in 2 crore in jaipur";
 
   //const sqlQuery = await setupExampleWithPropertySchema(query);

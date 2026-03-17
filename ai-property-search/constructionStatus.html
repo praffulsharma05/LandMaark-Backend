@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add Construction status</title>
+</head>
+
+<body>
+
+<h2>Add Construction status</h2>
+
+<form id="constructionForm">
+
+<input type="text" id="construction" placeholder="Enter construction status" required>
+
+<button type="submit">Add</button>
+
+</form>
+
+<p id="response"></p>
+
+<script>
+
+document.getElementById("constructionForm").addEventListener("submit", async function(e){
+
+e.preventDefault();
+
+const construction = document.getElementById("construction").value;
+
+const res = await fetch(`http://localhost:5000/api/construction_statuses?name=${encodeURIComponent(construction)}`);
+
+const data = await res.json();
+
+document.getElementById("response").innerText = JSON.stringify(data);
+
+});
+
+</script>
+
+</body>
+</html>

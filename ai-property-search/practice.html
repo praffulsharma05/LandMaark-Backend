@@ -1,0 +1,53 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add BHK Option</title>
+</head>
+
+<body>
+
+<h2>Add BHK Option</h2>
+
+<form id="bhkForm">
+
+<input type="number" id="bhk" placeholder="Enter BHK" required>
+
+<button type="submit">Add</button>
+
+</form>
+
+<p id="response"></p>
+
+<script>
+
+document.getElementById("bhkForm").addEventListener("submit", async function(e){
+
+e.preventDefault();
+
+const bhkInput = document.getElementById("bhk");
+
+const bhk = bhkInput.value;
+
+try{
+
+const res = await fetch(`http://localhost:5000/api/bhk_options?bhk=${bhk}`);
+
+const data = await res.json();
+
+document.getElementById("response").innerText =
+JSON.stringify(data);
+
+}catch(err){
+
+console.error(err);
+
+}
+
+});
+
+</script>
+
+</body>
+</html>  
+ 
